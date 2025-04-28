@@ -1,11 +1,14 @@
 'use client'; // Ensure this is also at the top of the page using Button
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./globals.css";
-import { Loan } from "../components/LoanForm";
+import { Loan } from "../components/Calculation";
 import LoanForm from "../components/LoanForm";
-import { SavingsAccount } from '../components/SavingsForm';
-import SavingsAccountForm from '../components/SavingsForm';
+import SavingsAccountForm, { SavingsAccount } from '../components/SavingsForm';
 import Button from "../components/Button";
+import { runSimulationYearlyCompound } from '../components/Calculation';
+import SimulationConfiguration, { SimulationParams } from '../components/SimulationConfigurationForm';
+import StringDisplay from '../components/StringDisplay';
+import SafeStringDisplay from '../components/SafeStringDisplay';
 
 export default function Home() {
   const [showFields, setShowFields] = useState(false);
@@ -13,6 +16,16 @@ export default function Home() {
   const [showSavingsFields, setShowSavingsFieldsButton] = useState(false);
   const [simStarted, setSimStarted] = useState(false);
   const [savingsAccounts, setSavingsAccounts] = useState<SavingsAccount[]>([]);
+  const [showSimulationParams, setShowSimulationParams] = useState(false);
+  const [showRunSimButton, setShowRunSinButton] = useState(false);
+  const [simConfig, setSimConfig] = useState<SimulationParams>({
+    simulationEndYear: "",
+    paymentAmount: "",
+    totalContribution:"",
+  });
+  const [simResult, setSimResult] = useState<any[]>([0, "", ""]);
+  const [showSimResult, setShowSimResult] = useState(false);
+
 
   const handleAddSavings = (account: SavingsAccount) => {
     const { initialAmount, interestRate, accountName, originationYear } = account;
@@ -36,16 +49,28 @@ export default function Home() {
   const [loans, setLoans] = useState<Loan[]>([]);
 
   const handleAddLoan = (loan: Loan) => {
-    const { initialAmount, interestRate, loanName, originationYear, yearsTilPaymentStart } = loan;
-
-    if (initialAmount && interestRate && loanName && originationYear && yearsTilPaymentStart) {
+    const { initialAmount, interestRate, name, originationYear, yearsTilPaymentStart } = loan;
+    console.log( "adding loan", loan);
+    if (initialAmount && interestRate && name && originationYear && yearsTilPaymentStart) {
       setLoans((prev) => [...prev, loan]);
       alert("Loan Added!");
       setShowLoanFieldsButton((prev) => ! prev)
+   
     } else {
+      console.log(initialAmount);
+      console.log(interestRate);
+      console.log(name);
+      console.log(originationYear);
+      console.log(yearsTilPaymentStart);
+
       alert("Insufficient information, loan not added");
     }
   };
+
+  useEffect(() => {
+    console.log("current loans in pre sim:");
+    console.log(loans);
+  }, [loans]);
 
   const createLoanHandleClick = () => {
     setShowLoanFieldsButton(true);
@@ -53,12 +78,25 @@ export default function Home() {
   const createSavingsHandleClick = () => setShowSavingsFieldsButton(!showSavingsFields);
 
   const promptSimulationParameters = () => {
+    console.log("done adding accounts clicked, requesting simulation parameters")
     setShowLoanFieldsButton(false);
     setShowSavingsFieldsButton(false)
     setShowFields(false);
-    alert("implement me!!!");
+    setShowSimulationParams(true);
   }
 
+  const handleAddSimConfig = (simConfig: SimulationParams) => {
+    setShowSimulationParams(false);
+    setShowRunSinButton(true);
+    setSimConfig(simConfig)
+  
+  }
+  const runSimulation = () => {
+    console.log("running simulation yearly compound")
+    setShowRunSinButton(false)
+    setSimResult(runSimulationYearlyCompound(loans, savingsAccounts, Number(simConfig.paymentAmount),  Number(simConfig.totalContribution),  Number(simConfig.simulationEndYear) ));
+    setShowSimResult(true);
+  }
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
@@ -76,6 +114,14 @@ export default function Home() {
             <Button text="Done Adding Accounts" onClick={promptSimulationParameters} />
           </div>
         )}
+        {showSimulationParams && <SimulationConfiguration onAddConfig={handleAddSimConfig}/>}
+        {showRunSimButton && <Button text="Run Simulation" onClick={runSimulation} /> }
+        {showSimResult && (
+                  <h1> TOTAL AMOUNT PAID:  {simResult[0]} <br></br>
+                  {simResult[1]}  <br></br>
+                  {simResult[2]}
+                  </h1>
+        )}      
       </main>
     </div>
   );

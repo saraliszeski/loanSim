@@ -1,25 +1,21 @@
 'use client';
 import React, { useState } from 'react';
+import { Loan } from "../components/Calculation";
 
 interface LoanFormProps {
   onAddLoan: (loan: Loan) => void;
 }
 
-export interface Loan {
-  loanName: string;
-  originationYear: string;
-  interestRate: string;
-  initialAmount: string;
-  yearsTilPaymentStart: string;
-}
 
 export default function LoanForm({ onAddLoan }: LoanFormProps) {
   const [formData, setFormData] = useState<Loan>({
-    loanName: '',
-    originationYear: '',
-    interestRate: '',
-    initialAmount: '',
-    yearsTilPaymentStart: '',
+    name: '',
+    originationYear: "",
+    interestRate: "",
+    initialAmount: "",
+    currentPrincipal: 0,
+    interest: 0,
+    yearsTilPaymentStart: 0,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,13 +28,29 @@ export default function LoanForm({ onAddLoan }: LoanFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAddLoan(formData); // pass the loan back to parent
+
+    // Convert initialAmount to number and log it
+    const initialAmount = Number(formData.initialAmount);
+    console.log("initial amount: ", initialAmount);
+
+    // Check if the value is valid and set the currentPrincipal
+    const validInitialAmount = isNaN(initialAmount) ? 0 : initialAmount;
+
+    // Update the form data and pass it to the parent
+    onAddLoan({
+      ...formData,
+      currentPrincipal: validInitialAmount, // Ensure currentPrincipal is valid
+    });
+
+    // Update formData after submission
     setFormData({
-      loanName: '',
-      originationYear: '',
-      interestRate: '',
-      initialAmount: '',
-      yearsTilPaymentStart: '',
+      name: formData.name,
+      originationYear: formData.originationYear,
+      interestRate: formData.interestRate,
+      initialAmount: formData.initialAmount,
+      currentPrincipal: validInitialAmount, // Set currentPrincipal with valid number
+      interest: formData.interest,
+      yearsTilPaymentStart: formData.yearsTilPaymentStart,
     });
   };
 
@@ -46,9 +58,9 @@ export default function LoanForm({ onAddLoan }: LoanFormProps) {
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <input
         type="text"
-        name="loanName"
-        placeholder="Loan Name"
-        value={formData.loanName}
+        name="name"
+        placeholder="name"
+        value={formData.name}
         onChange={handleChange}
         className="border p-2 rounded"
       />
