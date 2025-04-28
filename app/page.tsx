@@ -8,7 +8,7 @@ import Button from "../components/Button";
 import { runSimulationYearlyCompound } from '../components/Calculation';
 import SimulationConfiguration, { SimulationParams } from '../components/SimulationConfigurationForm';
 import StringDisplay from '../components/StringDisplay';
-
+import LoanList from '../components/LoanList';
 export default function Home() {
   const [showFields, setShowFields] = useState(false);
   const [showLoanFields, setShowLoanFieldsButton] = useState(false);
@@ -22,9 +22,12 @@ export default function Home() {
     paymentAmount: "",
     totalContribution:"",
   });
+  const [showCreationButtons, setShowCreationButtons] = useState(false);
   const [simResult, setSimResult] = useState<any[]>([0, "", ""]);
   const [showSimResult, setShowSimResult] = useState(false);
   const [savingsAccountsPresent, setSavingsAccountsPresent] = useState(false);
+  const [showLoanList, setShowLoanList] = useState(false);
+ // const [showCreateLoanButton, setShowCreateLoanButton] = useState(false);
 
 
   const handleAddSavings = (account: SavingsAccount) => {
@@ -49,6 +52,7 @@ export default function Home() {
     if (!simStarted) {
       setShowFields(true);
       setSimStarted(true);
+      setShowCreationButtons(true);
     }
   };
 
@@ -85,7 +89,8 @@ export default function Home() {
   }, [loans]);
 
   const createLoanHandleClick = () => {
-    setShowLoanFieldsButton(true);
+    setShowLoanFieldsButton((prev) => ! prev);
+   // setShowCreateLoanButton()
   }
   const createSavingsHandleClick = () => setShowSavingsFieldsButton(!showSavingsFields);
 
@@ -95,6 +100,8 @@ export default function Home() {
     setShowSavingsFieldsButton(false)
     setShowFields(false);
     setShowSimulationParams(true);
+   // setSimStarted(false);
+    setShowCreationButtons(false);
   }
 
   const validateLoanPayment = (config: SimulationParams) => {
@@ -112,16 +119,29 @@ export default function Home() {
         alert("No savings accounts present. Payment must match Total Contribution, or savings accounts must be added")
       }
       else{
+        console.log("loan payment validated")
         setShowSimulationParams(false);
         setShowRunSinButton(true);
-        setSimConfig(simConfig)
+        setSimConfig(config)
       }
   }
 
   const handleAddSimConfig = (simConfig: SimulationParams) => {
     validateLoanPayment(simConfig);
-    
   }
+
+  const handleLoanSave = (index: number, updatedLoan: Loan) => {
+    setLoans(prev => {
+      const updated = [...prev];
+      updated[index] = updatedLoan;
+      return updated;
+    });
+  };
+  
+  const handleLoanDelete = (index: number) => {
+    setLoans(prev => prev.filter((_, i) => i !== index));
+  };
+  
 
 
   const runSimulation = () => {
@@ -131,36 +151,58 @@ export default function Home() {
     setShowSimResult(true);
   }
 
+  const showCurrentLoans = () => {
+    setShowLoanList((prev) => ! prev);
+  }
+
 
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start buttonContainer">
-        <div className="title-container">
-          <h1>Welcome to Crushing Student Debt</h1>
-          <p>The student loan and savings simulator</p>
-        </div>
+      <div className="title-container fixed top-0 bg-white z-10 w-full text-center py-4 shadow-md flex items-center justify-center gap-4">
+          <img 
+            src="https://www.shutterstock.com/image-vector/atlas-holding-globe-logo-design-600nw-2194317793.jpg" 
+            alt="Atlas Holding Globe" 
+            className="w-24 h-24 object-cover rounded-full"
+          />
+           <div className="flex flex-col items-center pr-24"> {/* Padding right to match image size */}
+            <h1 className="text-6xl font-bold text-purple-800">Welcome to Atlas!</h1>
+            <p className="text-xl text-purple-600">The student loan and savings simulator</p>
+          </div>
+      </div>
+
         
-        {!simStarted && 
+        {!simStarted  &&
           <Button text="start loan sim" onClick={startButtonHandleClick} />
         }
+        {showCreationButtons && 
   
-        {showFields && (
-          <div className="mt-4">
-            <Button text="Create Loan" onClick={createLoanHandleClick} />
+        <div className="loanSavingsContainer">
+          {/* Loan Box */}
+          <div className="buttonHolder">
+            <Button text="Create Loan" onClick={createLoanHandleClick} /> 
             {showLoanFields && <LoanForm onAddLoan={handleAddLoan} />}
+          </div>
+
+          {/* Savings Box */}
+          <div className="buttonHolder">
             <Button text="Create Savings Account" onClick={createSavingsHandleClick} />
             {showSavingsFields && <SavingsAccountForm onAddSavings={handleAddSavings} />}
           </div>
-        )}
+        </div>
+        }
   
         {showSimulationParams && <SimulationConfiguration onAddConfig={handleAddSimConfig}/>}
-        
-        {/* Ensure the "Done Adding Accounts" button is placed below the other buttons */}
+
+        {showLoanList && <LoanList loans={loans} onSave={handleLoanSave} onDelete={handleLoanDelete} /> }
+        <Button className="specialButton" onClick={showCurrentLoans} text="Show Current Loans" />
+
+
         {showFields && (
-          <div className="mt-4">
-            <Button text="Done Adding Accounts" onClick={promptSimulationParameters} />
-          </div>
+            <div className="mt-4">
+              <Button text="Done Adding Accounts" onClick={promptSimulationParameters} />
+            </div>
         )}
   
         {showRunSimButton && <Button text="Run Simulation" onClick={runSimulation} /> }

@@ -3,21 +3,18 @@
 import React from 'react';
 import "../app/globals.css";
 
-
-// components/Button.tsx
 type ButtonProps = {
   text: string;
   onClick: () => void;
+  className?: string; // Make className an optional prop
 };
 
-const Button = ({ text, onClick }: ButtonProps) => {
+const Button = ({ text, onClick, className }: ButtonProps) => {
   return (
-    <button onClick={onClick} className="px-4 py-2 bg-blue-500 text-white rounded">
+    <button onClick={onClick} className={className}>
       {text}
     </button>
   );
 };
 
-export default Button; // ✅ THIS LINE is important
-
-  
+export default Button;

@@ -28,6 +28,7 @@ export default function SimulationConfiguration({ onAddConfig }: SimulationProps
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("config form data", formData);
     onAddConfig(formData); // pass the loan back to parent
     setFormData({
         paymentAmount: formData.paymentAmount,

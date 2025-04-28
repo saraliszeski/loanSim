@@ -81,7 +81,37 @@ Button {
 
 .buttonContainer {
   justify-content: center;
-  align-items: center
+align-items: center
 }
 
+.buttonHolder{
+  background-color: #f3f4f6; /* Tailwind's bg-gray-100 */
+  padding: 1.5rem;  /* Equivalent to p-6 */
+  border-radius: 0.75rem;  /* Equivalent to rounded-lg */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Equivalent to shadow */
+  display: flex;
+  justify-content: center;  /* Centers the button horizontally */
+  align-items: center;  /* Centers the button vertically */
+  margin-top: 20px; 
+}
+
+.loanSavingsContainer{
+  margin-top: 1; /* Equivalent to mt-4 */
+  display: flex;    /* Equivalent to flex */
+  flex-direction: column; /* Equivalent to flex-col */
+  gap: 1.5;      /* Equivalent to gap-6 */
+  width: 100%;      /* Equivalent to w-full */
+  justify-content: center;  /* Centers the button horizontally */
+  align-items: center;  /* Centers the button vertically */
+}
+
+.specialButton{
+  background-color: #D3B8E6; /* Tailwind's bg-gray-100 */
+  max-width: 189px;
+  margin-top: 20px; 
+
+}
+.specialButton2{
+  background-color: #4A2C83;
+}
 
