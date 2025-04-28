@@ -24,15 +24,22 @@ export default function Home() {
   });
   const [simResult, setSimResult] = useState<any[]>([0, "", ""]);
   const [showSimResult, setShowSimResult] = useState(false);
+  const [savingsAccountsPresent, setSavingsAccountsPresent] = useState(false);
 
 
   const handleAddSavings = (account: SavingsAccount) => {
     const { initialAmount, interestRate, accountName, originationYear } = account;
 
     if (initialAmount && interestRate && accountName && originationYear ) {
+      if(Number.isNaN(Number(initialAmount)) || Number.isNaN(Number(interestRate)) || Number.isNaN(Number(originationYear)) ){
+        alert("Input values must all be numbers")
+      }
+      else{
       setSavingsAccounts((prev) => [...prev, account]);
       alert("Savings Account Added!");
       setShowSavingsFieldsButton((prev) => ! prev)
+      setSavingsAccountsPresent(true);
+      }
     } else {
       alert("Insufficient information, account not added");
     }
@@ -50,10 +57,16 @@ export default function Home() {
   const handleAddLoan = (loan: Loan) => {
     const { initialAmount, interestRate, name, originationYear, yearsTilPaymentStart } = loan;
     console.log( "adding loan", loan);
+
     if (initialAmount && interestRate && name && originationYear && yearsTilPaymentStart) {
-      setLoans((prev) => [...prev, loan]);
-      alert("Loan Added!");
-      setShowLoanFieldsButton((prev) => ! prev)
+      if(Number.isNaN(Number(initialAmount)) || Number.isNaN(Number(interestRate)) || Number.isNaN(Number(originationYear)) || Number.isNaN(Number(yearsTilPaymentStart)) ){
+        alert("Input values must all be numbers")
+      }
+      else{
+        setLoans((prev) => [...prev, loan]);
+        alert("Loan Added!");
+        setShowLoanFieldsButton((prev) => ! prev)
+      }
    
     } else {
       console.log(initialAmount);
@@ -84,18 +97,42 @@ export default function Home() {
     setShowSimulationParams(true);
   }
 
-  const handleAddSimConfig = (simConfig: SimulationParams) => {
-    setShowSimulationParams(false);
-    setShowRunSinButton(true);
-    setSimConfig(simConfig)
-  
+  const validateLoanPayment = (config: SimulationParams) => {
+    console.log("validating loan payment");
+    console.log(savingsAccountsPresent);
+    console.log(simConfig);
+    console.log(config.paymentAmount != config.totalContribution);
+      if(Number.isNaN(Number(config.paymentAmount)) || Number.isNaN(Number(config.simulationEndYear)) || Number.isNaN(Number(config.totalContribution)) ){
+        alert("Input values must all be numbers")
+      }
+      else if(config.paymentAmount > config.totalContribution){
+        alert("Payment may not exceed total contribution")
+      }
+      else if(! savingsAccountsPresent && config.paymentAmount != config.totalContribution){
+        alert("No savings accounts present. Payment must match Total Contribution, or savings accounts must be added")
+      }
+      else{
+        setShowSimulationParams(false);
+        setShowRunSinButton(true);
+        setSimConfig(simConfig)
+      }
   }
+
+  const handleAddSimConfig = (simConfig: SimulationParams) => {
+    validateLoanPayment(simConfig);
+    
+  }
+
+
   const runSimulation = () => {
     console.log("running simulation yearly compound")
     setShowRunSinButton(false)
     setSimResult(runSimulationYearlyCompound(loans, savingsAccounts, Number(simConfig.paymentAmount),  Number(simConfig.totalContribution),  Number(simConfig.simulationEndYear) ));
     setShowSimResult(true);
   }
+
+
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start buttonContainer">

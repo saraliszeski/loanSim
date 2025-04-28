@@ -15,7 +15,7 @@ export default function LoanForm({ onAddLoan }: LoanFormProps) {
     initialAmount: "",
     currentPrincipal: 0,
     interest: 0,
-    yearsTilPaymentStart: 0,
+    yearsTilPaymentStart: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
