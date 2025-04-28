@@ -100,6 +100,7 @@ export default function Home() {
     setShowSavingsFieldsButton(false)
     setShowFields(false);
     setShowSimulationParams(true);
+    setShowSimResult(false);
    // setSimStarted(false);
     setShowCreationButtons(false);
   }
@@ -195,8 +196,8 @@ export default function Home() {
   
         {showSimulationParams && <SimulationConfiguration onAddConfig={handleAddSimConfig}/>}
 
-        {showLoanList && <LoanList loans={loans} onSave={handleLoanSave} onDelete={handleLoanDelete} /> }
-        <Button className="specialButton" onClick={showCurrentLoans} text="Show Current Loans" />
+        {simStarted && showLoanList && <LoanList loans={loans} onSave={handleLoanSave} onDelete={handleLoanDelete} /> }
+        {simStarted &&  <Button className="specialButton" onClick={showCurrentLoans} text="Show Current Loans" /> }
 
 
         {showFields && (
@@ -208,6 +209,7 @@ export default function Home() {
         {showRunSimButton && <Button text="Run Simulation" onClick={runSimulation} /> }
   
         {showSimResult && <StringDisplay text={simResult} />}      
+        {showSimResult && <Button text="Rerun Simulation" onClick={promptSimulationParameters} /> }
       </main>
     </div>
   );
