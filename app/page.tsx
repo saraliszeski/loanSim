@@ -148,7 +148,12 @@ export default function Home() {
   const runSimulation = () => {
     console.log("running simulation yearly compound")
     setShowRunSinButton(false)
-    setSimResult(runSimulationYearlyCompound(loans, savingsAccounts, Number(simConfig.paymentAmount),  Number(simConfig.totalContribution),  Number(simConfig.simulationEndYear) ));
+
+    const clonedLoans = JSON.parse(JSON.stringify(loans));
+    const clonedSavings = JSON.parse(JSON.stringify(savingsAccounts));
+
+
+    setSimResult(runSimulationYearlyCompound(clonedLoans, clonedSavings, Number(simConfig.paymentAmount),  Number(simConfig.totalContribution),  Number(simConfig.simulationEndYear) ));
     setShowSimResult(true);
   }
 

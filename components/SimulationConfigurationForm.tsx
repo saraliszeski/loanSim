@@ -42,7 +42,7 @@ export default function SimulationConfiguration({ onAddConfig }: SimulationProps
       <input
         type="string"
         name="paymentAmount"
-        placeholder="loan payment amount"
+        placeholder="loan payment amount PER YEAR"
         value={formData.paymentAmount}
         onChange={handleChange}
         className="border p-2 rounded"
@@ -50,7 +50,7 @@ export default function SimulationConfiguration({ onAddConfig }: SimulationProps
       <input
         type="string"
         name="totalContribution"
-        placeholder="total contribution (savings + loans)"
+        placeholder="total contribution (savings + loans) PER YEAR"
         value={formData.totalContribution}
         onChange={handleChange}
         className="border p-2 rounded"
