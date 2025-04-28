@@ -6,3 +6,16 @@
     border: none;
     cursor: pointer;
   }
+  .StringDisplay {
+      background-color: #D3B8E6;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      margin: auto;
+      margin-Top: 20px;
+      font-size: 18px;
+      color: #4A2C83; 
+      margin-bottom: 10px;
+      font-family: Arial, sans-serif;
+  }

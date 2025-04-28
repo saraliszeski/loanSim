@@ -8,7 +8,6 @@ import Button from "../components/Button";
 import { runSimulationYearlyCompound } from '../components/Calculation';
 import SimulationConfiguration, { SimulationParams } from '../components/SimulationConfigurationForm';
 import StringDisplay from '../components/StringDisplay';
-import SafeStringDisplay from '../components/SafeStringDisplay';
 
 export default function Home() {
   const [showFields, setShowFields] = useState(false);
@@ -97,31 +96,39 @@ export default function Home() {
     setSimResult(runSimulationYearlyCompound(loans, savingsAccounts, Number(simConfig.paymentAmount),  Number(simConfig.totalContribution),  Number(simConfig.simulationEndYear) ));
     setShowSimResult(true);
   }
-
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <h1> Welcome to Crushing Debt, the Student Loan Simulator!</h1>
+      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start buttonContainer">
+        <div className="title-container">
+          <h1>Welcome to Crushing Student Debt</h1>
+          <p>The student loan and savings simulator</p>
+        </div>
+        
         {!simStarted && 
           <Button text="start loan sim" onClick={startButtonHandleClick} />
         }
+  
         {showFields && (
           <div className="mt-4">
             <Button text="Create Loan" onClick={createLoanHandleClick} />
             {showLoanFields && <LoanForm onAddLoan={handleAddLoan} />}
             <Button text="Create Savings Account" onClick={createSavingsHandleClick} />
             {showSavingsFields && <SavingsAccountForm onAddSavings={handleAddSavings} />}
+          </div>
+        )}
+  
+        {showSimulationParams && <SimulationConfiguration onAddConfig={handleAddSimConfig}/>}
+        
+        {/* Ensure the "Done Adding Accounts" button is placed below the other buttons */}
+        {showFields && (
+          <div className="mt-4">
             <Button text="Done Adding Accounts" onClick={promptSimulationParameters} />
           </div>
         )}
-        {showSimulationParams && <SimulationConfiguration onAddConfig={handleAddSimConfig}/>}
+  
         {showRunSimButton && <Button text="Run Simulation" onClick={runSimulation} /> }
-        {showSimResult && (
-                  <h1> TOTAL AMOUNT PAID:  {simResult[0]} <br></br>
-                  {simResult[1]}  <br></br>
-                  {simResult[2]}
-                  </h1>
-        )}      
+  
+        {showSimResult && <StringDisplay text={simResult} />}      
       </main>
     </div>
   );

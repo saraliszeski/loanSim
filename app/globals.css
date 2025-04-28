@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -33,3 +34,54 @@ Button {
   border: none;
   cursor: pointer;
 }
+.StringDisplay {
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: auto;
+  margin-Top: 20px;
+  font-size: 25px;
+  margin-bottom: 10px;
+  font-family: 'Coolvetica', sans-serif;
+  text-align: center;
+
+}
+.Title{
+  background-color: #D3B8E6;
+  font-size: 25px;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-family: 'Courier New', sans-serif;
+
+}
+.title-container {
+  background-color: #DFF8EB;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+}
+
+.title-container h1 {
+  font-size: 36px;
+  color: #6A4C93;
+  margin-bottom: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.title-container p {
+  font-size: 18px;
+  color: #4A2C83;
+  font-weight: 300;
+  margin-top: 10px;
+}
+
+.buttonContainer {
+  justify-content: center;
+  align-items: center
+}
+
+
