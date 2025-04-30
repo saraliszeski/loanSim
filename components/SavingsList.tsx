@@ -32,7 +32,8 @@ const SavingsList: React.FC<SavingsListProps> = ({ accounts, onSave, onDelete })
   return (
     <div className="flex flex-col gap-4 w-full max-w-md">
       {editableAccounts.map((account, index) => (
-        <div key={index} className="bg-gray-100 p-4 rounded shadow-sm">
+        <div key={index} className="List">
+            .
           <div className="flex flex-col gap-2">
             <input
               className="border p-2 rounded"

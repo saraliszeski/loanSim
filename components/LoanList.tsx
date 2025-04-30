@@ -38,7 +38,7 @@ const LoanList: React.FC<LoanListProps> = ({ loans, onSave, onDelete }) => {
   return (
     <div className="flex flex-col gap-4 w-full max-w-md">
       {editableLoans.map((loan, index) => (
-        <div key={index} className="bg-gray-100 p-4 rounded shadow-sm">
+        <div key={index} className="List">
           <div className="flex flex-col gap-2">
             <input
               className="border p-2 rounded"

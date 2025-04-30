@@ -222,11 +222,34 @@ export default function Home() {
   
         {showSimulationParams && <SimulationConfiguration onAddConfig={handleAddSimConfig}/>}
 
-        {simStarted && showLoanList && <LoanList loans={loans} onSave={handleLoanSave} onDelete={handleLoanDelete} /> }
-        {simStarted &&  <Button className="specialButton" onClick={showCurrentLoans} text={(showLoanList? CLOSE : OPEN) + " Current loans"} /> }
-        
-        {simStarted && showSavingsList && <SavingsList accounts={savingsAccounts} onSave={handleSavingsSave} onDelete={handleSavingsDelete} /> }
-        {simStarted &&  <Button className="specialButton" onClick={showCurrentSavings} text={(showSavingsList? CLOSE : OPEN) + " Current savings accounts"} /> }
+        <div className="editableObjects">
+        <div className="editableSection">
+          {simStarted && showLoanList && (
+            <LoanList loans={loans} onSave={handleLoanSave} onDelete={handleLoanDelete} />
+          )}
+          {simStarted && (
+            <Button
+              className="specialButton"
+              onClick={showCurrentLoans}
+              text={(showLoanList ? CLOSE : OPEN) + " Current loans"}
+            />
+          )}
+        </div>
+
+        <div className="editableSection">
+          {simStarted && showSavingsList && (
+            <SavingsList accounts={savingsAccounts} onSave={handleSavingsSave} onDelete={handleSavingsDelete} />
+          )}
+          {simStarted && (
+            <Button
+              className="specialButton"
+              onClick={showCurrentSavings}
+              text={(showSavingsList ? CLOSE : OPEN) + " Current savings accounts"}
+            />
+          )}
+        </div>
+      </div>
+
 
 
         {showFields && (
