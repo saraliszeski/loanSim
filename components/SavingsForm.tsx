@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 
 export interface SavingsAccount {
     accountName: string;
-    originationYear: number;
-    interestRate: number;
-    initialAmount: number;
+    originationYear: string;
+    interestRate: string;
+    initialAmount: string;
     value: number;
   }
 
@@ -16,9 +16,9 @@ interface SavingsFormProps {
 export default function SavingsForm({ onAddSavings }: SavingsFormProps) {
   const [formData, setFormData] = useState<SavingsAccount>({
     accountName: '',
-    originationYear: NaN,
-    interestRate: NaN,
-    initialAmount: NaN,
+    originationYear: "",
+    interestRate: "",
+    initialAmount: "",
     value: NaN
   });
 
@@ -34,10 +34,10 @@ export default function SavingsForm({ onAddSavings }: SavingsFormProps) {
     e.preventDefault();
     onAddSavings(formData);
     setFormData({
-      accountName: '',
-      originationYear: NaN,
-      interestRate: NaN,
-      initialAmount: NaN,
+      accountName: formData.accountName,
+      originationYear: formData.originationYear,
+      interestRate: formData.interestRate,
+      initialAmount: formData.initialAmount,
       value: 0
     });
   };

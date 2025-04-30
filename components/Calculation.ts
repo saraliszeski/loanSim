@@ -74,6 +74,14 @@ function redistributeOverpayment(loans: Loan[], year: number, overpayment: numbe
   }
   return 0;
 }
+function validateSavingsAccountsStartYear(simulationStartYear: number, savingsAccounts: SavingsAccount[]): boolean {
+  for(let savingsAccount of savingsAccounts){
+    if(Number(savingsAccount.originationYear) < simulationStartYear){
+      return false;
+    }
+  }
+  return true;
+}
 
 // Function to run the simulation
 export function runSimulationYearlyCompound(
@@ -88,6 +96,8 @@ export function runSimulationYearlyCompound(
     alert("No loans added, please add loans before running the simulation.");
     return [0,"", ""];
   }
+ 
+
 
   let amountPaid = 0;
   let year = getStartYear(loans);
@@ -95,6 +105,10 @@ export function runSimulationYearlyCompound(
   let currentLoans = determineExistingLoans(loans, year);
   const loanPrincipalCost = calculateLoanTotalCost(loans);
   const spendingPerYear: Record<number, number> = {};
+
+  if(! validateSavingsAccountsStartYear(year, savingsAccounts)){
+    alert("Savings Accounts created Prior to earliest loan origination not yet supported. Simulation will run with account origination year equal to earliest loan origination. To request this behavior be changed, please contact Sara :)")
+  }
 
   console.log("current loans:")
   console.log(currentLoans)
@@ -171,12 +185,12 @@ function consistentSavings(savingsAccounts: SavingsAccount[], spendingPerYear: R
 
     Object.keys(spendingPerYear).forEach(year => {
       const yearNum = parseInt(year);
-      if (account.originationYear <= yearNum) {
+      if (Number(account.originationYear) <= yearNum) {
         const rolloverFromPayments = (totalContribution - spendingPerYear[yearNum]) / savingsAccounts.length;
         accountValue += rolloverFromPayments;
 
         if (accountValue > 0) {
-          accountValue *= (1 + account.interestRate / 100);
+          accountValue *= (1 + Number(account.interestRate) / 100);
         } else {
           accountValue = 0;
         }

@@ -33,6 +33,12 @@ Button {
   border-radius: 4px;
   border: none;
   cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+}
+Button:active {
+  transform: translateY(2px); /* Moves it down slightly */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Smaller shadow */
 }
 .StringDisplay {
   padding: 20px;
