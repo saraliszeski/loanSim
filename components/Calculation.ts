@@ -150,12 +150,16 @@ export function runSimulationYearlyCompound(
 
     year += 1;
     if (year - 100 === startYear) {
-      return [amountPaid =roundTo(amountPaid, 2), `You have died before paying off your loans. The devil will be your new debt collector for the amount of ${calculateTotalOwed(currentLoans, year)}`, "", debtMap];
+      return [amountPaid =roundTo(amountPaid, 2), `You have died 💀 before paying off your loans. The devil 😈 will be your new debt collector for the amount of ${roundTo((calculateTotalOwed(currentLoans, year)),2)}`, "", debtMap];
     }
 
     if (year === simulationEndYear) {
-      const totalOwed = calculateTotalOwed(loans, year);
-      return [amountPaid =roundTo(amountPaid, 2), `Your debts in year ${year} are ${totalOwed}`, `Your net worth is ${consistentSavings(savingsAccounts, spendingPerYear, totalContribution) - amountPaid - totalOwed}`, debtMap];
+      const totalOwed = calculateTotalOwed(loans, year); 
+      let addOnCOmment = "";
+      if(totalOwed > 0){
+        addOnCOmment += ". Gotta up those payments, Mr. Scrooge! 👎"
+      }
+      return [amountPaid =roundTo(amountPaid, 2), `Your debts in year ${year} are ${roundTo(totalOwed, 2)}`, `Your net worth is ${roundTo((consistentSavings(savingsAccounts, spendingPerYear, totalContribution) - amountPaid - totalOwed), 2)}` + addOnCOmment, debtMap];
     }
 
     currentLoans = determineExistingLoans(loans, year);
@@ -165,10 +169,10 @@ export function runSimulationYearlyCompound(
 
   if (savingsAccounts.length > 0) {
     const totalSavings = runNetWorthScenario(savingsAccounts, spendingPerYear, simulationEndYear, paymentAmount);
-    return [amountPaid, `Your loans were paid off in year ${year - 1} for the cost of $${amountPaid}. \n You paid $${amountPaid - loanPrincipalCost} in interest`, `Your net worth in year ${simulationEndYear} is ${totalSavings - amountPaid}`, debtMap];
+    return [amountPaid, `Your loans were paid off in year ${year - 1} for the cost of $${amountPaid}. \n You paid $${roundTo((amountPaid - loanPrincipalCost),2)} in interest`, `Your net worth in year ${simulationEndYear} is ${roundTo((totalSavings - amountPaid),2)}`, debtMap];
   }
 
-  return [amountPaid, `Your loans were paid off in year ${year - 1} for the cost of $${amountPaid}. \n You paid $${amountPaid - loanPrincipalCost} in interest`, "", debtMap];
+  return [amountPaid, `Your loans were paid off in year ${year - 1} for the cost of $${amountPaid}. \n You paid $${roundTo((amountPaid - loanPrincipalCost),2)} in interest`, "", debtMap];
 }
 const roundTo = function(num: number, places: number) {
   const factor = 10 ** places;
