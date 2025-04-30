@@ -2,6 +2,7 @@
 import LoanForm from "../components/LoanForm";
 import SavingsAccountForm from '../components/SavingsForm';
 import { SavingsAccount } from '../components/SavingsForm';
+import React, { useState, useEffect } from 'react';
 
 
 // types.ts
@@ -14,6 +15,8 @@ export interface Loan {
     interest: number;
     yearsTilPaymentStart: string;
   }
+
+  let debtMap = new Map();
   
 // Function to calculate the interest on loans
 function calculateInterest(loans: Loan[], paymentAmount: number): number {
@@ -54,8 +57,11 @@ function determineExistingLoans(loans: Loan[], currentYear: number): Loan[] {
 }
 
 // Function to calculate the total owed across all loans
-function calculateTotalOwed(loans: Loan[]): number {
-  return loans.reduce((total, loan) => total + (loan.currentPrincipal + loan.interest), 0);
+function calculateTotalOwed(loans: Loan[], year: number): number {
+  let currentTotalDebt=  loans.reduce((total, loan) => total + (loan.currentPrincipal + loan.interest), 0);
+  debtMap.set(year, (currentTotalDebt)); 
+  return currentTotalDebt;
+
 }
 
 // Function to calculate the total loan cost (principal only)
@@ -90,17 +96,18 @@ export function runSimulationYearlyCompound(
   paymentAmount: number,
   totalContribution: number,
   simulationEndYear: number
-): [number, string, string] {
+): [number, string, string, Map<number, number>] {
 
   if (loans.length === 0) {
     alert("No loans added, please add loans before running the simulation.");
-    return [0,"", ""];
+    return [0,"", "", debtMap];
   }
  
 
 
   let amountPaid = 0;
   let year = getStartYear(loans);
+  debtMap = new Map();
   const startYear = year;
   let currentLoans = determineExistingLoans(loans, year);
   const loanPrincipalCost = calculateLoanTotalCost(loans);
@@ -112,12 +119,12 @@ export function runSimulationYearlyCompound(
 
   console.log("current loans:")
   console.log(currentLoans)
-  if (calculateTotalOwed(loans) === 0) {
-    return [amountPaid, "You owe $0 in loans....why are you here???", ""];
+  if (calculateTotalOwed(loans, year) === 0) {
+    return [amountPaid, "You owe $0 in loans....why are you here???", "", debtMap];
   }
 
-  if (calculateTotalOwed(loans) < 0) {
-    return [amountPaid, "The government owes YOU money. Pick up your pitchfork and go fight.", ""];
+  if (calculateTotalOwed(loans, year) < 0) {
+    return [amountPaid, "The government owes YOU money. Pick up your pitchfork and go fight.", "", debtMap];
   }
 
   while (currentLoans.length === 0) {
@@ -138,17 +145,17 @@ export function runSimulationYearlyCompound(
 
     console.log(`YEAR ${year}`);
     console.log(`TOTAL PAID: ${amountPaid}`);
-    console.log(`YOU STILL OWE: ${calculateTotalOwed(loans)}`);
+    console.log(`YOU STILL OWE: ${calculateTotalOwed(loans, year)}`);
     console.log("");
 
     year += 1;
     if (year - 100 === startYear) {
-      return [amountPaid =roundTo(amountPaid, 2), `You have died before paying off your loans. The devil will be your new debt collector for the amount of ${calculateTotalOwed(currentLoans)}`, ""];
+      return [amountPaid =roundTo(amountPaid, 2), `You have died before paying off your loans. The devil will be your new debt collector for the amount of ${calculateTotalOwed(currentLoans, year)}`, "", debtMap];
     }
 
     if (year === simulationEndYear) {
-      const totalOwed = calculateTotalOwed(loans);
-      return [amountPaid =roundTo(amountPaid, 2), `Your debts in year ${year} are ${totalOwed}`, `Your net worth is ${consistentSavings(savingsAccounts, spendingPerYear, totalContribution) - amountPaid - totalOwed}`];
+      const totalOwed = calculateTotalOwed(loans, year);
+      return [amountPaid =roundTo(amountPaid, 2), `Your debts in year ${year} are ${totalOwed}`, `Your net worth is ${consistentSavings(savingsAccounts, spendingPerYear, totalContribution) - amountPaid - totalOwed}`, debtMap];
     }
 
     currentLoans = determineExistingLoans(loans, year);
@@ -158,10 +165,10 @@ export function runSimulationYearlyCompound(
 
   if (savingsAccounts.length > 0) {
     const totalSavings = runNetWorthScenario(savingsAccounts, spendingPerYear, simulationEndYear, paymentAmount);
-    return [amountPaid, `Your loans were paid off in year ${year - 1} for the cost of $${amountPaid}. \n You paid $${amountPaid - loanPrincipalCost} in interest`, `Your net worth in year ${simulationEndYear} is ${totalSavings - amountPaid}`];
+    return [amountPaid, `Your loans were paid off in year ${year - 1} for the cost of $${amountPaid}. \n You paid $${amountPaid - loanPrincipalCost} in interest`, `Your net worth in year ${simulationEndYear} is ${totalSavings - amountPaid}`, debtMap];
   }
 
-  return [amountPaid, `Your loans were paid off in year ${year - 1} for the cost of $${amountPaid}. \n You paid $${amountPaid - loanPrincipalCost} in interest`, ""];
+  return [amountPaid, `Your loans were paid off in year ${year - 1} for the cost of $${amountPaid}. \n You paid $${amountPaid - loanPrincipalCost} in interest`, "", debtMap];
 }
 const roundTo = function(num: number, places: number) {
   const factor = 10 ** places;

@@ -11,6 +11,7 @@ import StringDisplay from '../components/StringDisplay';
 import LoanList from '../components/LoanList';
 import SavingsList from '../components/SavingsList';
 import CustomHeader from '../components/CustomHeader';
+import DebtChart from '../components/DebtChart';
 
 export default function Home() {
   const OPEN = "Open";
@@ -29,7 +30,7 @@ export default function Home() {
     totalContribution:"",
   });
   const [showCreationButtons, setShowCreationButtons] = useState(false);
-  const [simResult, setSimResult] = useState<any[]>([0, "", ""]);
+  const [simResult, setSimResult] = useState<any[]>([]);
   const [showSimResult, setShowSimResult] = useState(false);
   const [savingsAccountsPresent, setSavingsAccountsPresent] = useState(false);
   const [showLoanList, setShowLoanList] = useState(false);
@@ -168,11 +169,11 @@ export default function Home() {
     console.log("running simulation yearly compound")
     setShowRunSinButton(false)
 
-    const clonedLoans = JSON.parse(JSON.stringify(loans));
-    const clonedSavings = JSON.parse(JSON.stringify(savingsAccounts));
-
+    let clonedLoans = JSON.parse(JSON.stringify(loans));
+    let clonedSavings = JSON.parse(JSON.stringify(savingsAccounts));
 
     setSimResult(runSimulationYearlyCompound(clonedLoans, clonedSavings, Number(simConfig.paymentAmount),  Number(simConfig.totalContribution),  Number(simConfig.simulationEndYear) ));
+  
     setShowSimResult(true);
   }
 
@@ -251,7 +252,9 @@ export default function Home() {
   
         {showRunSimButton && <Button text="Run Simulation" onClick={runSimulation} /> }
   
-        {showSimResult && <StringDisplay text={simResult} />}      
+        {showSimResult && <StringDisplay text={simResult} />}   
+        {showSimResult && <DebtChart debtArray={simResult[3]} />}
+   
         {showSimResult && <Button text="Rerun Simulation" onClick={promptSimulationParameters} /> }
       </main>
     </div>
