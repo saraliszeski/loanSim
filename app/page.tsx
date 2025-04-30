@@ -9,7 +9,12 @@ import { runSimulationYearlyCompound } from '../components/Calculation';
 import SimulationConfiguration, { SimulationParams } from '../components/SimulationConfigurationForm';
 import StringDisplay from '../components/StringDisplay';
 import LoanList from '../components/LoanList';
+import SavingsList from '../components/SavingsList';
+
 export default function Home() {
+  const OPEN = "Open";
+  const CLOSE = "Close";
+
   const [showFields, setShowFields] = useState(false);
   const [showLoanFields, setShowLoanFieldsButton] = useState(false);
   const [showSavingsFields, setShowSavingsFieldsButton] = useState(false);
@@ -27,7 +32,7 @@ export default function Home() {
   const [showSimResult, setShowSimResult] = useState(false);
   const [savingsAccountsPresent, setSavingsAccountsPresent] = useState(false);
   const [showLoanList, setShowLoanList] = useState(false);
- // const [showCreateLoanButton, setShowCreateLoanButton] = useState(false);
+  const [showSavingsList, setShowSavingsList] = useState(false);
 
 
   const handleAddSavings = (account: SavingsAccount) => {
@@ -143,6 +148,18 @@ export default function Home() {
   const handleLoanDelete = (index: number) => {
     setLoans(prev => prev.filter((_, i) => i !== index));
   };
+
+  const handleSavingsSave = (index: number, updatedAccount: SavingsAccount) => {
+    setSavingsAccounts(prev => {
+      const updated = [...prev];
+      updated[index] = updatedAccount;
+      return updated;
+    });
+  };
+  
+  const handleSavingsDelete = (index: number) => {
+    setSavingsAccounts(prev => prev.filter((_, i) => i !== index));
+  };
   
 
 
@@ -160,6 +177,9 @@ export default function Home() {
 
   const showCurrentLoans = () => {
     setShowLoanList((prev) => ! prev);
+  }
+  const showCurrentSavings = () => {
+    setShowSavingsList((prev) => ! prev);
   }
 
 
@@ -203,7 +223,10 @@ export default function Home() {
         {showSimulationParams && <SimulationConfiguration onAddConfig={handleAddSimConfig}/>}
 
         {simStarted && showLoanList && <LoanList loans={loans} onSave={handleLoanSave} onDelete={handleLoanDelete} /> }
-        {simStarted &&  <Button className="specialButton" onClick={showCurrentLoans} text="Show Current Loans" /> }
+        {simStarted &&  <Button className="specialButton" onClick={showCurrentLoans} text={(showLoanList? CLOSE : OPEN) + " Current loans"} /> }
+        
+        {simStarted && showSavingsList && <SavingsList accounts={savingsAccounts} onSave={handleSavingsSave} onDelete={handleSavingsDelete} /> }
+        {simStarted &&  <Button className="specialButton" onClick={showCurrentSavings} text={(showSavingsList? CLOSE : OPEN) + " Current savings accounts"} /> }
 
 
         {showFields && (
