@@ -105,6 +105,7 @@ export default function Home() {
     setShowCreationButtons(false);
   }
 
+
   const validateLoanPayment = (config: SimulationParams) => {
     console.log("validating loan payment");
     console.log(savingsAccountsPresent);

@@ -1,12 +1,12 @@
 'use client';
 import React, { useState } from 'react';
-import Button from './Button'; // assuming you already have a custom Button component
 
 export interface SavingsAccount {
     accountName: string;
-    originationYear: string;
-    interestRate: string;
-    initialAmount: string;
+    originationYear: number;
+    interestRate: number;
+    initialAmount: number;
+    value: number;
   }
 
 interface SavingsFormProps {
@@ -16,9 +16,10 @@ interface SavingsFormProps {
 export default function SavingsForm({ onAddSavings }: SavingsFormProps) {
   const [formData, setFormData] = useState<SavingsAccount>({
     accountName: '',
-    originationYear: '',
-    interestRate: '',
-    initialAmount: '',
+    originationYear: NaN,
+    interestRate: NaN,
+    initialAmount: NaN,
+    value: NaN
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,9 +35,10 @@ export default function SavingsForm({ onAddSavings }: SavingsFormProps) {
     onAddSavings(formData);
     setFormData({
       accountName: '',
-      originationYear: '',
-      interestRate: '',
-      initialAmount: '',
+      originationYear: NaN,
+      interestRate: NaN,
+      initialAmount: NaN,
+      value: 0
     });
   };
 
@@ -74,7 +76,7 @@ export default function SavingsForm({ onAddSavings }: SavingsFormProps) {
         onChange={handleChange}
         className="border p-2 rounded"
       />
-            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
+        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
         Add Account
       </button>    </form>
   );

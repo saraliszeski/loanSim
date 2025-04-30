@@ -159,10 +159,10 @@ function getStartYear(loans: Loan[]): number {
 }
 
 function anyLoansInPaymentProcess(loans: Loan[]): boolean {
-  return loans.some(loan => loan.yearsTilPaymentStart <= 0);
+  return loans.some(loan => Number(loan.yearsTilPaymentStart) <= 0);
 }
 
-// Function to calculate consistent savings
+// Function to calculate consistent savsings
 function consistentSavings(savingsAccounts: SavingsAccount[], spendingPerYear: Record<number, number>, totalContribution: number): number {
   let totalSavings = 0;
 
