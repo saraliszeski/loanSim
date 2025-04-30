@@ -10,6 +10,7 @@ import SimulationConfiguration, { SimulationParams } from '../components/Simulat
 import StringDisplay from '../components/StringDisplay';
 import LoanList from '../components/LoanList';
 import SavingsList from '../components/SavingsList';
+import CustomHeader from '../components/CustomHeader';
 
 export default function Home() {
   const OPEN = "Open";
@@ -185,19 +186,9 @@ export default function Home() {
 
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start buttonContainer">
-      <div className="title-container fixed top-0 bg-white z-10 w-full text-center py-4 shadow-md flex items-center justify-center gap-4">
-          <img 
-            src="https://www.shutterstock.com/image-vector/atlas-holding-globe-logo-design-600nw-2194317793.jpg" 
-            alt="Atlas Holding Globe" 
-            className="w-24 h-24 object-cover rounded-full"
-          />
-           <div className="flex flex-col items-center pr-24"> {/* Padding right to match image size */}
-            <h1 className="text-6xl font-bold text-purple-800">Welcome to Atlas!</h1>
-            <p className="text-xl text-purple-600">The student loan and savings simulator</p>
-          </div>
-      </div>
+    <div className="custom-grid grid grid-rows-[20px_1fr_20px]   min-h-screen p-8 pb-20 gap-16 sm:p-20">
+      <main className="custom-main sm:items-start buttonContainer">
+      <CustomHeader/>
 
         
         {!simStarted  &&
@@ -254,7 +245,7 @@ export default function Home() {
 
         {showFields && (
             <div className="mt-4">
-              <Button text="Done Adding Accounts" onClick={promptSimulationParameters} />
+              <Button text="Done Adding Accounts" onClick={promptSimulationParameters} className="done-adding-accounts" />
             </div>
         )}
   

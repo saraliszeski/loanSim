@@ -27,7 +27,7 @@ body {
 }
 Button {
   padding: 12px 24px;
-  background-color: #F56476;
+  background-color: #c77dff;
   margin: 8px;
   color: white;
   border-radius: 4px;
@@ -84,29 +84,31 @@ Button {
 align-items: center
 }
 
-.buttonHolder{
-  background-color: #f3f4f6; /* Tailwind's bg-gray-100 */
-  padding: 1.5rem;  /* Equivalent to p-6 */
-  border-radius: 0.75rem;  /* Equivalent to rounded-lg */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Equivalent to shadow */
-  display: flex;
-  justify-content: center;  /* Centers the button horizontally */
-  align-items: center;  /* Centers the button vertically */
-  margin-top: 20px; 
+.loanSavingsContainer {
+  margin-top: 1rem;         /* Correct unit */
+  display: flex;            /* Enables flexbox */
+  flex-direction: column;      /* Make children side-by-side */
+  gap: 1.5rem;              /* Equivalent to gap-6 */
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;  /* Align tops if content height differs */
 }
 
-.loanSavingsContainer{
-  margin-top: 1; /* Equivalent to mt-4 */
-  display: flex;    /* Equivalent to flex */
-  flex-direction: column; /* Equivalent to flex-col */
-  gap: 1.5;      /* Equivalent to gap-6 */
-  width: 100%;      /* Equivalent to w-full */
-  justify-content: center;  /* Centers the button horizontally */
-  align-items: center;  /* Centers the button vertically */
+.buttonHolder {
+  background-color: #f3f4f6;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;    /* stack button + form vertically */
+  justify-content: center;
+  align-items: center;
+  width: 100%;                   /* Take equal width */
 }
+
 
 .specialButton{
-  background-color: #D3B8E6; /* Tailwind's bg-gray-100 */
+  background-color: #7776BC; /* Tailwind's bg-gray-100 */
   max-width: 189px;
   margin-top: 20px; 
 
@@ -132,4 +134,48 @@ align-items: center
   border-radius: 0.75rem;  /* Equivalent to rounded-lg */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Equivalent to shadow */
   display: flex;
+}
+
+.custom-grid {
+  display: grid;
+  grid-template-rows: 20px 1fr 20px;
+  align-items: center;
+  justify-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  padding-bottom: 5rem;
+  gap: 4rem;
+  font-family: var(--font-geist-sans);
+}
+
+/* Responsive padding for small screens and up (sm:p-20 in Tailwind) */
+@media (min-width: 640px) {
+  .custom-grid {
+    padding: 5rem;
+  }
+}
+.custom-main{
+  display: flex;    /* Equivalent to flex */
+  flex-direction: column; /* Equivalent to flex-col */
+  gap: 32px;
+  align-items: center;  /* Centers the button vertically */
+  justify-content: center;
+  grid-row-start: 2;
+}
+.done-adding-accounts{
+  background-color: #9eb3c2;
+  padding: 0.5rem 4rem;
+}
+
+.create-objects-button{
+  padding: 0.25rem 1rem;
+  margin: 0rem;
+}
+.create-objects-holder{
+  display: flex;    /* Equivalent to flex */
+  flex-direction: column; /* Equivalent to flex-col */
+  align-items: center;  /* Centers the button vertically */
+  justify-content: center;
+  padding: 0.75rem;
+  gap: 1rem;
 }

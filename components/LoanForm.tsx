@@ -55,7 +55,7 @@ export default function LoanForm({ onAddLoan }: LoanFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="create-objects-holder">
       <input
         type="text"
         name="name"
@@ -96,7 +96,7 @@ export default function LoanForm({ onAddLoan }: LoanFormProps) {
         onChange={handleChange}
         className="border p-2 rounded"
       />
-      <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
+      <button type="submit" className="create-objects-button">
         Add Loan
       </button>
     </form>
